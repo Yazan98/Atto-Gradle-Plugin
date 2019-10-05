@@ -1,0 +1,85 @@
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.2'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+}
+
+repositories {
+    google()
+    jcenter()
+    mavenLocal()
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+    }
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation 'org.codehaus.groovy:groovy-all:2.5.6'
+    implementation "org.gradle:gradle-tooling-api:3.0"
+    testImplementation 'org.spockframework:spock-core:1.2-groovy-2.5'
+}
+
+
+compileGroovy {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+group = "io.atto.gradle.plugin"
+version = "1.0.2"
+
+
+def javaApiUrl = 'http://docs.oracle.com/javase/1.7.0/docs/api/'
+def groovyApiUrl = 'http://groovy.codehaus.org/gapi/'
+tasks.withType(Javadoc) {
+    options.links(javaApiUrl, groovyApiUrl)
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+
+pluginBundle {
+    website = 'https://Atto-io.github.io'
+    vcsUrl = 'https://github.com/Atto-io/Atto-Plugin.git'
+    tags = ['gradle', 'android', 'android-plugin', 'plugins']
+}
+
+gradlePlugin {
+    plugins {
+        greetingsPlugin {
+            id = 'io.atto.gradle.plugin'
+            displayName = 'Atto Plugin'
+            description = 'Atto Gradle Plugin To Manage Atto Applications (Android)'
+            implementationClass = 'io.atto.gradle.plugin.AttoPlugin'
+        }
+    }
+}
